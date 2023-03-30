@@ -4,7 +4,6 @@ import psutil
 import tkinter as tk
 from tkinter import messagebox
 import requests
-import time
 
 WEBHOOK_URL = 'DISCORD_WEBHOOK_HERE'
 
