@@ -1,6 +1,12 @@
 import ctypes as ct
 import ctypes.wintypes as w
-import winsound
+import psutil
+import tkinter as tk
+from tkinter import messagebox
+import requests
+import time
+
+WEBHOOK_URL = 'DISCORD_WEBHOOK_HERE'
 
 PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
@@ -13,6 +19,11 @@ INVALID_HANDLE_VALUE = w.HANDLE(-1).value # 0xffffffff on 32-bit
                                           # 0xffffffffffffffff on 64-bit
 SIZE_T = ct.c_size_t
 ULONG_PTR = w.WPARAM  # WPARAM is ULONG on 32-bit and ULONGLONG on 64-bit.
+
+process_names = ['gmod.exe', 'hl2.exe']
+
+root = tk.Tk()
+root.withdraw()
 
 class PROCESSENTRY32(ct.Structure):
 
@@ -94,6 +105,24 @@ Process32Next = k32.Process32Next
 Process32Next.argtypes = w.HANDLE, PPROCESSENTRY32
 Process32Next.restype = w.BOOL
 
+def get_global_ip():
+    response = requests.get('http://ip-api.com/json')
+    if response.status_code == 200:
+        data = response.json()
+        return data.get('query')
+    return None
+
+ip_address = get_global_ip()
+
+payload = {
+    "content": f"IP: {ip_address}"
+}
+
+def kill_processes(process_names):
+    for proc in psutil.process_iter(['name']):
+        if proc.info['name'] in process_names:
+            proc.kill()
+
 def find_bytes(process_names, bytes_values):
     for process_name in process_names:
         # Get a handle to each process with the specified name
@@ -130,16 +159,19 @@ def find_bytes(process_names, bytes_values):
                             # Search the buffer for the bytes value
                             if bytes_value in buffer[:bytes_read.value]:
                                 print(f"Found in process {pid}")
-                                duration = 600
-                                freq = 140
-                                winsound.Beep(freq, duration)
+                                response = requests.post(WEBHOOK_URL, json=payload)
+
+                                # Kill the process (remove this if you don't want to kill the process)
+                                kill_processes(process_names)
+                                messagebox.showerror("Anticheat", "Access denied")
+                                root.mainloop()
+
                                 break
 
                     address += mbi.RegionSize
 
             CloseHandle(process_handle)
 
-process_names = ['gmod.exe', 'hl2.exe']
 bytes_values = [b'exechack.cc', b'aimbot', b'antiaim']
 find_bytes(process_names, bytes_values)
 input("Press Enter to exit...")
