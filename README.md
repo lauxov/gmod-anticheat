@@ -1,4 +1,4 @@
-# AC
+# This code will be updated as often as I can.
 
 This code is a Python script that can be used to find a sequence of bytes within the memory of a running process on Windows.
 
