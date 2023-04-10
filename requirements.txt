@@ -1,0 +1,4 @@
+ctypes
+psutil
+requests
+tk
