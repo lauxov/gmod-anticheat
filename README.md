@@ -1,4 +1,4 @@
-# Memory Scanner for Windows Processes
+# Memory Scanner AC
 
 [![DEMO](https://img.youtube.com/vi/4-oiAVARMd0/0.jpg)]([https://youtu.be/4-oiAVARMd0](https://youtu.be/k8tIRj6HT_0))
 
