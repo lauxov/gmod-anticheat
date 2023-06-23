@@ -1,3 +1,8 @@
+# If you need the code in one file - take only this file ⚠️⚠️⚠️
+# If you need the code in one file - take only this file ⚠️⚠️⚠️
+# If you need the code in one file - take only this file ⚠️⚠️⚠️
+# If you need the code in one file - take only this file ⚠️⚠️⚠️
+
 d=print
 L=None
 K='name'
