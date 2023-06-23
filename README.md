@@ -1,6 +1,6 @@
 # Memory Scanner AC
 
-[![DEMO](https://img.youtube.com/vi/4-oiAVARMd0/0.jpg)]([https://youtu.be/4-oiAVARMd0](https://youtu.be/k8tIRj6HT_0))
+![DEMO]([https://youtu.be/4-oiAVARMd0](https://youtu.be/k8tIRj6HT_0))
 
 This Python script provides a memory scanning functionality for finding sequences of bytes within the memory of running processes on Windows. It utilizes the Windows API and performs low-level memory operations using the `ctypes` module.
 
