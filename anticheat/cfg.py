@@ -1,40 +1,34 @@
-import ctypes.wintypes as w
 import ctypes as ct
+import ctypes.wintypes as w
 import tkinter as tk
 
-#Discord Webhook URL
 WEBHOOK_URL = 'WEBHOOK_URL'
 
-#Windows API Constants
 PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
-#Memory Constants
+
 MEM_COMMIT = 0x1000
 MEM_RESERVE = 0x2000
-#Memory Protection Constants
+
 PAGE_READWRITE = 0x04
 MAX_PATH = 260
-#Snapshot Constants
-TH32CS_SNAPPROCESS = 0x2
-INVALID_HANDLE_VALUE = w.HANDLE(-1).value # 0xffffffff on 32-bit
-                                          # 0xffffffffffffffff on 64-bit
-SIZE_T = ct.c_size_t
-ULONG_PTR = w.WPARAM  # WPARAM is ULONG on 32-bit and ULONGLONG on 64-bit.
 
-#Process Names
+TH32CS_SNAPPROCESS = 0x2
+INVALID_HANDLE_VALUE = w.HANDLE(-1).value 
+detected_elements = []
+embeds = []
+
 process_names = ['gmod.exe', 'hl2.exe']
 
-#Tkinter Window
 root = tk.Tk()
 root.withdraw()
 
-#Windows API Structures
 class PROCESSENTRY32(ct.Structure):
 
     _fields_ = (('dwSize', w.DWORD),
                 ('cntUsage', w.DWORD),
                 ('th32ProcessID', w.DWORD),
-                ('th32DefaultHeapID', ULONG_PTR),
+                ('th32DefaultHeapID', w.WPARAM),
                 ('th32ModuleID', w.DWORD),
                 ('cntThreads', w.DWORD),
                 ('th32ParentProcessID', w.DWORD),
@@ -42,7 +36,6 @@ class PROCESSENTRY32(ct.Structure):
                 ('dwFlags', w.DWORD),
                 ('szExeFile', w.CHAR * MAX_PATH))
 
-    # Allow this structure to print itself
     def __repr__(self):
         return f'PROCESSENTRY32(dwSize={self.dwSize}, ' \
                               f'cntUsage={self.cntUsage}, ' \
@@ -51,25 +44,23 @@ class PROCESSENTRY32(ct.Structure):
                               f'th32ModuleID={self.th32ModuleID:#x}, ' \
                               f'cntThreads={self.cntThreads}, ' \
                               f'th32ParentProcessID={self.th32ParentProcessID:#x}, ' \
+                              f'pcPriClassBase={self.pcPriClassBase}, ' \
                               f'dwFlags={self.dwFlags:#x}, ' \
                               f'szExeFile={self.szExeFile})'
 
-# Define a pointer to a PROCESSENTRY32 structure
 PPROCESSENTRY32 = ct.POINTER(PROCESSENTRY32)
 
-# Define a MEMORY_BASIC_INFORMATION structure
 class MEMORY_BASIC_INFORMATION(ct.Structure):
 
     _fields_ = (("BaseAddress", w.LPVOID),
                 ("AllocationBase", w.LPVOID),
                 ("AllocationProtect", w.DWORD),
                 ("PartitionId", w.WORD),
-                ("RegionSize", SIZE_T),
+                ("RegionSize", ct.c_size_t),
                 ("State", w.DWORD),
                 ("Protect", w.DWORD),
                 ("Type", w.DWORD))
 
-    # Allow this structure to print itself
     def __repr__(self):
         return f'MEMORY_BASIC_INFORMATION(BaseAddress={self.BaseAddress if self.BaseAddress is not None else 0:#x}, ' \
                                         f'AllocationBase={self.AllocationBase if self.AllocationBase is not None else 0:#x}, ' \
@@ -82,25 +73,22 @@ class MEMORY_BASIC_INFORMATION(ct.Structure):
 
 PMEMORY_BASIC_INFORMATION = ct.POINTER(MEMORY_BASIC_INFORMATION)
 
-#Windows API Functions
 k32 = ct.WinDLL('kernel32', use_last_error=True)
 OpenProcess = k32.OpenProcess
 OpenProcess.argtypes = w.DWORD, w.BOOL, w.DWORD
 OpenProcess.restype = w.HANDLE
 
-# Define a pointer to a function that takes a HANDLE and returns a BOOL
 ReadProcessMemory = k32.ReadProcessMemory
 ReadProcessMemory.argtypes = w.HANDLE, w.LPCVOID, w.LPVOID, ct.c_size_t, ct.POINTER(ct.c_size_t)
 ReadProcessMemory.restype = w.BOOL
 
-# Define a pointer to a function that takes a HANDLE and returns a BOOL
 CloseHandle = k32.CloseHandle
 CloseHandle.argtypes = w.HANDLE,
 CloseHandle.restype = w.BOOL
 
 VirtualQueryEx = k32.VirtualQueryEx
-VirtualQueryEx.argtypes = w.HANDLE, w.LPCVOID, PMEMORY_BASIC_INFORMATION, SIZE_T
-VirtualQueryEx.restype = SIZE_T
+VirtualQueryEx.argtypes = w.HANDLE, w.LPCVOID, PMEMORY_BASIC_INFORMATION, ct.c_size_t
+VirtualQueryEx.restype = ct.c_size_t
 
 CreateToolhelp32Snapshot = k32.CreateToolhelp32Snapshot
 CreateToolhelp32Snapshot.argtypes = w.DWORD, w.DWORD
