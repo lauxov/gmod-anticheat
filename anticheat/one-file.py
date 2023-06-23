@@ -1,7 +1,7 @@
 # If you need the code in one file - take only this file ⚠️⚠️⚠️⚠️
 # If you need the code in one file - take only this file⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 # If you need the code in one file - take only this file⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-# If you need the code in one file - take only this file⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+# If you need the code in one file - take ONLY this file⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 d=print
 L=None
