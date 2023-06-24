@@ -1,4 +1,6 @@
 ctypes
+ctypes.wintypes
+winsound
 psutil
 requests
-tk
+wmi
