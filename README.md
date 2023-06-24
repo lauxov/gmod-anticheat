@@ -10,6 +10,11 @@ This Python script provides a memory scanning functionality for finding sequence
 - `ctypes.wintypes`
 - `winsound`
 
+![image](https://github.com/lauxov/gmod-anticheat/assets/110423050/c1b92411-4be7-43a2-b5e6-f71029036288) ![image](https://github.com/lauxov/gmod-anticheat/assets/110423050/1c6b481e-a7fa-4684-a9f9-0d721b2fcdad)
+![image](https://github.com/lauxov/gmod-anticheat/assets/110423050/39a25d29-0b11-446d-a4b2-9853c8ef56d7)
+
+
+
 ## Usage
 
 To use this script, follow these steps:
