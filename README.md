@@ -2,6 +2,8 @@
 
 DEMO: https://youtu.be/k8tIRj6HT_0
 
+⚠️ The webhook link is not protected in any way. It can be easily dumped or found in the Net logger
+
 This Python script provides a memory scanning functionality for finding sequences of bytes within the memory of running processes on Windows. It utilizes the Windows API and performs low-level memory operations using the `ctypes` module.
 
 ## Requirements
